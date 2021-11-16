@@ -1,0 +1,1 @@
+# Reference only files - ensure bin/apline-redis script gets all changes
