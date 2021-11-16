@@ -72,7 +72,7 @@ docker-purge: ## thorough docker environment cleanup
 	sudo service docker start
 
 redis-flush:
-	docker-compose exec redis redis-cli FLUSHALL
+	docker-compose exec redis redis-cli --user trivialsec --askpass FLUSHALL
 
 update: ## pulls images
 	docker-compose pull
