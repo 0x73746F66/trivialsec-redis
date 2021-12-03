@@ -43,6 +43,9 @@ attach-firewall:
 		-X POST -d '{"type": "linode", "id": $(shell curl -s -H "Authorization: Bearer ${TF_VAR_linode_token}" https://api.linode.com/v4/linode/instances | jq -r '.data[] | select(.label=="prd-cache.trivialsec.com") | .id')}' \
 		https://api.linode.com/v4/networking/firewalls/${LINODE_FIREWALL}/devices
 
+prod-flush:
+	ssh redis redis-cli --user trivialsec --askpass FLUSHALL
+
 #####################
 # Development Only
 #####################
@@ -71,8 +74,8 @@ docker-purge: ## thorough docker environment cleanup
 	sudo rm -rf /var/lib/docker
 	sudo service docker start
 
-redis-flush:
-	docker-compose exec redis redis-cli --user trivialsec --askpass FLUSHALL
+dev-flush:
+	docker-compose exec redis redis-cli FLUSHALL
 
 update: ## pulls images
 	docker-compose pull

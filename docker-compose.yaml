@@ -9,7 +9,8 @@ x-defaults: &defaults
 services:
   redis:
     <<: *defaults
-    image: docker.io/library/redis:5.0
+    image: docker.io/library/redis:6
+    command: "redis-server /etc/redis.conf"
     container_name: redis
     ports:
       - 6379:6379
@@ -17,6 +18,7 @@ services:
       - 6379
     volumes:
       - redis-datadir:/data
+      - ./config/redis-Dev.conf:/etc/redis.conf
     networks:
       default:
         aliases:
@@ -24,15 +26,12 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 0s
         max_attempts: 10
-        window: 3s
       resources:
         limits:
           cpus: '1.00'
           memory: 1GB
         reservations:
-          cpus: '0.50'
           memory: 500M
 
 volumes:
