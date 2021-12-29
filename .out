@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
+unset TF_VAR_public_key
+unset TF_VAR_allowed_linode_username
+unset LINODE_FIREWALL
+unset TF_VAR_redis_password
 reset

@@ -21,7 +21,6 @@ deploy: plan apply attach-firewall output ## tf plan and apply -auto-approve -re
 
 plan: init ## Runs tf validate and tf plan
 	cd plans
-	terraform init -reconfigure -upgrade=true
 	terraform validate
 	terraform plan -no-color -out=.tfplan
 	terraform show --json .tfplan | jq -r '([.resource_changes[]?.change.actions?]|flatten)|{"create":(map(select(.=="create"))|length),"update":(map(select(.=="update"))|length),"delete":(map(select(.=="delete"))|length)}' > tfplan.json
@@ -74,8 +73,8 @@ docker-purge: ## thorough docker environment cleanup
 	sudo rm -rf /var/lib/docker
 	sudo service docker start
 
-dev-flush:
-	docker-compose exec redis redis-cli FLUSHALL
+dev-flush: ## dev only flush
+	docker-compose exec redis redis-cli --user trivialsec --askpass FLUSHALL
 
 update: ## pulls images
 	docker-compose pull
